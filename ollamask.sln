@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ollamask", "ollamask\ollama
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{C42485CA-4DD9-4B77-8483-25AB577E7234}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C42485CA-4DD9-4B77-8483-25AB577E7234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C42485CA-4DD9-4B77-8483-25AB577E7234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C42485CA-4DD9-4B77-8483-25AB577E7234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C42485CA-4DD9-4B77-8483-25AB577E7234}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -87,12 +87,14 @@ public class OllamaApiClient
     public OllamaApiClient(Configuration config)
 			: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
 		{
-    		}
+    		Config = config;
+			}
 
     public OllamaApiClient(HttpClient client, string defaultModel = "")
 		{
 			_client = client ?? throw new ArgumentNullException(nameof(client));
-			Config.Model = defaultModel;
+			(Config ??=  new Configuration()).Model = defaultModel;
+			
 		}
 
 
