@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ollamask", "ollamask\ollamask.csproj", "{FA73FDE2-D37E-4C9E-B555-C7AE37D367DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA73FDE2-D37E-4C9E-B555-C7AE37D367DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA73FDE2-D37E-4C9E-B555-C7AE37D367DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA73FDE2-D37E-4C9E-B555-C7AE37D367DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA73FDE2-D37E-4C9E-B555-C7AE37D367DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9448EC36-4A16-4BD7-A7F1-64D7FCC0D043}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
