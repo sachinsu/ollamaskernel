@@ -32,7 +32,6 @@ public class TestTextGeneration
         Assert.NotEqual(response[^1].Text,String.Empty);
 
 
-
     }
 
 
