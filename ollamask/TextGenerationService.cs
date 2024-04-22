@@ -15,11 +15,20 @@ public class TextGenerationService : ITextGenerationService
 
     private HttpClient client = new();
 
-    public Task<IReadOnlyList<TextContent>> GetTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<TextContent>> GetTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
     {
           
-        var ollama = new OllamaApiClient(ModelApiEndPoint, ModelName);
-        throw new NotImplementedException();
+        var client = new OllamaApiClient(ModelApiEndPoint, ModelName);
+
+        OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
+                Model=ModelName,
+                Prompt=prompt,
+        };
+
+        OllamaApiClient.ChatResponse resp = await client.GetResponseForPromptAsync(req
+            , cancellationToken);
+
+        return  new List<TextContent>() { new TextContent(resp.Response) };
     }
 
     public IAsyncEnumerable<StreamingTextContent> GetStreamingTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
