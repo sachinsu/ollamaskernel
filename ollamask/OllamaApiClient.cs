@@ -47,9 +47,9 @@ public class OllamaApiClient
 		[JsonPropertyName("model")]
 		public string Model { get;set;}
 
-		[JsonPropertyName("message")]
+		[JsonPropertyName("prompt")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public string Message {get; set;}
+		public string Prompt {get; set;}
 
 
 		[JsonPropertyName("format")]
@@ -88,18 +88,20 @@ public class OllamaApiClient
 			: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
 		{
     		Config = config;
+
 			}
 
     public OllamaApiClient(HttpClient client, string defaultModel = "")
 		{
 			_client = client ?? throw new ArgumentNullException(nameof(client));
+			_client.Timeout = TimeSpan.FromMinutes(10);
+
 			(Config ??=  new Configuration()).Model = defaultModel;
 			
 		}
 
-
-	public async Task<ChatResponse> GetResponseForPromptAsync(ChatMessage message, CancellationToken token) {
-		return await PostAsync<ChatMessage,ChatResponse>("/api/generate",message,token);
+	public async Task<ChatResponse> GetResponseForPromptAsync(ChatRequest message, CancellationToken token) {
+		return await PostAsync<ChatRequest,ChatResponse>("/api/generate",message,token);
 	}
 
     private async Task<TResponse> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken)
