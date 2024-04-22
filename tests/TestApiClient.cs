@@ -44,21 +44,32 @@ public class TestApiClient
 
     }
 
-    [Fact]
+    [Fact(Skip="streaming  not implemented")]
     public void TestPromptResponseStreaming() 
     {
         OllamaApiClient client = new("http://localhost:11434","gemma:2b");
 
+
         Assert.NotNull(client );      
     }
 
-    [Fact]
+    [Fact(Skip="chat response code is pending")]
     public void TestChatResponseNotStreaming() 
     {
         OllamaApiClient client = new("http://localhost:11434","gemma:2b");
 
         Assert.NotNull(client );      
     }
+
+
+    [Fact(Skip="chat response code is pending")]
+    public void TestChatResponseStreaming() 
+    {
+        OllamaApiClient client = new("http://localhost:11434","gemma:2b");
+
+        Assert.NotNull(client );      
+    }
+
 
 
 }
