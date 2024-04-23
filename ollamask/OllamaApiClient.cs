@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Azure.AI.OpenAI;
+
+using System.IO;
+
 
 public class OllamaApiClient 
 {
@@ -104,6 +106,15 @@ public class OllamaApiClient
 		return await PostAsync<ChatRequest,ChatResponse>("/api/generate",message,token);
 	}
 
+
+
+	public async IAsyncEnumerable<ChatResponse> GetStreamForPromptAsync(ChatRequest message, CancellationToken token) {
+		await foreach(ChatResponse resp in  StreamPostAsync<ChatRequest,ChatResponse>("/api/generate",message,token)) {
+			yield return resp;
+		}
+	}
+
+
     private async Task<TResponse> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken)
 		{
 			var response = await _client.GetAsync(endpoint, cancellationToken);
@@ -119,6 +130,27 @@ public class OllamaApiClient
 			var response = await _client.PostAsync(endpoint, content, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
+
+
+
+    private async IAsyncEnumerable<TResponse> StreamPostAsync<TRequest,TResponse>(string endpoint, TRequest request, CancellationToken cancellationToken)
+		{
+			var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+			var response = await _client.PostAsync(endpoint, content, cancellationToken);
+
+ 			using Stream stream = await response.Content.ReadAsStreamAsync();
+
+			using StreamReader reader = new StreamReader(stream);
+
+			while (!reader.EndOfStream) {
+				var jsonString = await reader.ReadLineAsync(cancellationToken);
+				TResponse  result =  JsonSerializer.Deserialize<TResponse>(jsonString);
+				yield return result;
+			}
+
+			yield break;
+	}
+
 
     private async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest request, CancellationToken cancellationToken)
 		{

@@ -24,7 +24,7 @@ public class TestApiClient
 
         OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
                 Model="gemma:2b",
-                Prompt="what is meteor?",
+                Prompt="what is meteor?"
         };
 
         Assert.NotNull(client );      
@@ -37,21 +37,43 @@ public class TestApiClient
         CancellationToken tkn = source.Token;
         
 
-        OllamaApiClient.ChatResponse resp = await client.GetResponseForPromptAsync(req
+        OllamaApiClient.ChatResponse resp = await  client.GetResponseForPromptAsync(req
             , tkn);
 
         Assert.NotNull(resp );
 
     }
 
-    [Fact(Skip="streaming  not implemented")]
-    public void TestPromptResponseStreaming() 
+
+    [Fact]
+    public async void TestPromptResponseStreaming() 
     {
         OllamaApiClient client = new("http://localhost:11434","gemma:2b");
 
+        OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
+                Model="gemma:2b",
+                Prompt="what is meteor?",
+                Stream=true
+        };
 
         Assert.NotNull(client );      
+
+        Assert.NotEqual("tata",req.Model );
+        Assert.NotEqual("what",req.Prompt );
+        Assert.NotEqual(false,req.Stream );
+        
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken tkn = source.Token;
+        
+
+        await foreach( OllamaApiClient.ChatResponse resp in client.GetStreamForPromptAsync(req
+            , tkn)) { 
+                Assert.NotNull(resp);
+                System.Diagnostics.Debug.WriteLine(resp.Response);
+            }
+
     }
+
 
     [Fact(Skip="chat response code is pending")]
     public void TestChatResponseNotStreaming() 

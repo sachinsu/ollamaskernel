@@ -31,7 +31,6 @@ public class TestTextGeneration
         var response = textGen.GetTextContentsAsync("The weather in January in Toronto is usually ").Result;
         Assert.NotEqual(response[^1].Text,String.Empty);
 
-
     }
 
 
