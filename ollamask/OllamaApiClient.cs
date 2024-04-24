@@ -1,6 +1,6 @@
 namespace ollamask;
 
-
+using System;
 using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
@@ -103,17 +103,16 @@ public class OllamaApiClient
 		}
 
 	public async Task<ChatResponse> GetResponseForPromptAsync(ChatRequest message, CancellationToken token) {
+		message.Model = this.Config.Model;
 		return await PostAsync<ChatRequest,ChatResponse>("/api/generate",message,token);
 	}
 
-
-
 	public async IAsyncEnumerable<ChatResponse> GetStreamForPromptAsync(ChatRequest message, CancellationToken token) {
+		message.Model = this.Config.Model;
 		await foreach(ChatResponse resp in  StreamPostAsync<ChatRequest,ChatResponse>("/api/generate",message,token)) {
 			yield return resp;
 		}
 	}
-
 
     private async Task<TResponse> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken)
 		{

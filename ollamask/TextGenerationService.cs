@@ -28,17 +28,21 @@ public class TextGenerationService : ITextGenerationService
         OllamaApiClient.ChatResponse resp = await client.GetResponseForPromptAsync(req
             , cancellationToken);
 
-        return  new List<TextContent>() { new TextContent(resp.Response) };
+        return new List<TextContent>() { new TextContent(resp.Response) };
     }
 
-    public IAsyncEnumerable<StreamingTextContent> GetStreamingTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<StreamingTextContent> GetStreamingTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
     {
-            // var ollama = new OllamaApiClient(ModelUrl, ModelName);
+            var ollama = new OllamaApiClient(ModelApiEndPoint, ModelName);
 
-            // var completionResponse = await ollama.GetCompletion(prompt, null, CancellationToken.None);
+            OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
+                    Prompt=prompt,
+                    Stream=true
+            };
 
-            // TextContent stc = new TextContent(completionResponse.Response);
-            // return new List<TextContent> { stc };    
-            throw new NotImplementedException();
+            await foreach( OllamaApiClient.ChatResponse resp in ollama.GetStreamForPromptAsync(req, cancellationToken)) {
+                    yield return new StreamingTextContent( text:  resp.Response) ;
+            } 
+
     }
 }

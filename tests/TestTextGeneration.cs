@@ -17,7 +17,7 @@ public class TestTextGeneration
     {
         var ollamaText = new TextGenerationService();
         ollamaText.ModelApiEndPoint = "http://localhost:11434";
-        ollamaText.ModelName = "gemma:2b";
+        ollamaText.ModelName = "phi3";
 
 
         // semantic kernel builder

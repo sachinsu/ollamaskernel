@@ -27,17 +27,15 @@ public class TestApiClient
         OllamaApiClient client = new(endpoint,modelName);
 
         OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
-                Model=modelName,
                 Prompt="what is meteor?"
         };
 
         Assert.NotNull(client );      
 
-        Assert.NotEqual("tata",req.Model );
         Assert.NotEqual("what",req.Prompt );
-        Assert.NotEqual(true,req.Stream );
+        Assert.False(req.Stream );
         
-        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationTokenSource source = new();
         CancellationToken tkn = source.Token;
         
 
@@ -55,21 +53,18 @@ public class TestApiClient
         OllamaApiClient client = new(endpoint,modelName);
 
         OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
-                Model=modelName,
                 Prompt="Is India a Great Country?",
                 Stream=true
         };
 
         Assert.NotNull(client );      
 
-        Assert.NotEqual("tata",req.Model );
         Assert.NotEqual("what",req.Prompt );
         Assert.NotEqual(false,req.Stream );
         
         CancellationTokenSource source = new CancellationTokenSource();
         CancellationToken tkn = source.Token;
         
-
         await foreach( OllamaApiClient.ChatResponse resp in client.GetStreamForPromptAsync(req
             , tkn)) { 
                 Assert.NotNull(resp);
