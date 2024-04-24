@@ -8,10 +8,14 @@ using ollamask;
 
 public class TestApiClient
 {
+
+    private const string modelName = "phi3";
+    private const string endpoint = "http://localhost:11434";
+
     [Fact]
     public void TestClientCreation() 
     {
-        OllamaApiClient client = new("http://localhost:11434","gemma:2b");
+        OllamaApiClient client = new(endpoint,modelName);
 
         Assert.NotEqual(null,client );      
     }
@@ -20,10 +24,10 @@ public class TestApiClient
     [Fact]
     public async void TestPromptResponseNotStreaming() 
     {
-        OllamaApiClient client = new("http://localhost:11434","gemma:2b");
+        OllamaApiClient client = new(endpoint,modelName);
 
         OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
-                Model="gemma:2b",
+                Model=modelName,
                 Prompt="what is meteor?"
         };
 
@@ -48,11 +52,11 @@ public class TestApiClient
     [Fact]
     public async void TestPromptResponseStreaming() 
     {
-        OllamaApiClient client = new("http://localhost:11434","gemma:2b");
+        OllamaApiClient client = new(endpoint,modelName);
 
         OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
-                Model="gemma:2b",
-                Prompt="what is meteor?",
+                Model=modelName,
+                Prompt="Is India a Great Country?",
                 Stream=true
         };
 
@@ -78,7 +82,7 @@ public class TestApiClient
     [Fact(Skip="chat response code is pending")]
     public void TestChatResponseNotStreaming() 
     {
-        OllamaApiClient client = new("http://localhost:11434","gemma:2b");
+        OllamaApiClient client = new(endpoint,modelName);
 
         Assert.NotNull(client );      
     }
@@ -87,7 +91,7 @@ public class TestApiClient
     [Fact(Skip="chat response code is pending")]
     public void TestChatResponseStreaming() 
     {
-        OllamaApiClient client = new("http://localhost:11434","gemma:2b");
+        OllamaApiClient client = new(endpoint,modelName);
 
         Assert.NotNull(client );      
     }
