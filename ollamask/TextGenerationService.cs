@@ -3,8 +3,6 @@ using Microsoft.SemanticKernel.TextGeneration;
 
 namespace ollamask;
 
-    
-
 public class TextGenerationService : ITextGenerationService
 {
     

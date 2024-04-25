@@ -13,7 +13,7 @@ using ollamask;
 public class TestTextGeneration
 {
     [Fact]
-    public void TestTextGenerationviaSK() 
+    public async void TestTextGenerationviaSK() 
     {
         var ollamaText = new TextGenerationService();
         ollamaText.ModelApiEndPoint = "http://localhost:11434";
@@ -28,8 +28,14 @@ public class TestTextGeneration
 
         // text generation
         var textGen = kernel.GetRequiredService<ITextGenerationService>();
-        var response = textGen.GetTextContentsAsync("The weather in January in Toronto is usually ").Result;
+        var response = await textGen.GetTextContentsAsync("The weather in January in Toronto is usually ");
         Assert.NotEqual(response[^1].Text,String.Empty);
+
+
+        await foreach(StreamingTextContent str in  textGen.GetStreamingTextContentsAsync("Who is President of USA?")){
+            Assert.NotNull(str.Text);
+        }
+
 
     }
 

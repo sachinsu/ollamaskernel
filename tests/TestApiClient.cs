@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ollamask;
-
+using Azure.AI.OpenAI;
 
 public class TestApiClient
 {
@@ -17,7 +17,7 @@ public class TestApiClient
     {
         OllamaApiClient client = new(endpoint,modelName);
 
-        Assert.NotEqual(null,client );      
+        Assert.NotNull(client );      
     }
 
 
@@ -46,6 +46,38 @@ public class TestApiClient
 
     }
 
+    [Fact]
+    public async void TestChatResponseNotStreaming() 
+    {
+        OllamaApiClient client = new(endpoint,modelName);
+
+        List<OllamaApiClient.ChatMessage> mesgs = new() {
+            new OllamaApiClient.ChatMessage(){Role="system",Content="What is sixth sense?"}
+        };
+
+        OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
+                Messages= mesgs
+        };
+
+        Assert.NotNull(client );      
+
+        Assert.NotNull( req.Messages );
+    
+        Assert.False(req.Stream );
+        
+        CancellationTokenSource source = new();
+        CancellationToken tkn = source.Token;
+        
+
+        OllamaApiClient.ChatResponse resp = await  client.GetResponseForChatAsync(req
+            , tkn);
+
+        Assert.NotNull(resp );
+        Assert.NotNull(resp.Message);
+        Assert.NotEmpty(resp.Message.Content);
+    }
+
+
 
     [Fact]
     public async void TestPromptResponseStreaming() 
@@ -60,7 +92,7 @@ public class TestApiClient
         Assert.NotNull(client );      
 
         Assert.NotEqual("what",req.Prompt );
-        Assert.NotEqual(false,req.Stream );
+        Assert.True(req.Stream );
         
         CancellationTokenSource source = new CancellationTokenSource();
         CancellationToken tkn = source.Token;
@@ -74,21 +106,38 @@ public class TestApiClient
     }
 
 
-    [Fact(Skip="chat response code is pending")]
-    public void TestChatResponseNotStreaming() 
+
+    [Fact]
+    public async void TestChatResponseStreaming() 
     {
         OllamaApiClient client = new(endpoint,modelName);
 
+        List<OllamaApiClient.ChatMessage> mesgs = new() {
+            new OllamaApiClient.ChatMessage(){Role="user",Content="What is sixth sense?"}
+        };
+
+        OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
+                Messages= mesgs,
+                Stream=true
+        };
+
+
+    
         Assert.NotNull(client );      
-    }
 
+        Assert.NotNull(req.Messages );
+        Assert.True(req.Stream );
+        
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken tkn = source.Token;
+        
+        await foreach( OllamaApiClient.ChatResponse resp in client.GetStreamForChatAsync(req
+            , tkn)) { 
+                Assert.NotNull(resp);   
+                Assert.NotNull(resp.Message);
+                System.Diagnostics.Debug.WriteLine(resp.Message.Content);
+            }
 
-    [Fact(Skip="chat response code is pending")]
-    public void TestChatResponseStreaming() 
-    {
-        OllamaApiClient client = new(endpoint,modelName);
-
-        Assert.NotNull(client );      
     }
 
 

@@ -41,6 +41,16 @@ public class OllamaApiClient
 		[JsonPropertyName("response")]
 		public string Response { get; set; }
 
+
+		[JsonPropertyName("message")]
+		public ChatMessage? Message { get; set; }
+
+
+		[JsonPropertyName("messages")]
+		public List<ChatMessage> Messages { get; set; }
+
+
+
 		[JsonPropertyName("done")]
 		public bool Done { get; set; }
 	}
@@ -102,6 +112,12 @@ public class OllamaApiClient
 			
 		}
 
+	public async Task<ChatResponse> GetResponseForChatAsync(ChatRequest message, CancellationToken token) {
+		message.Model = this.Config.Model;
+		return await PostAsync<ChatRequest,ChatResponse>("/api/chat",message,token);
+	}
+
+
 	public async Task<ChatResponse> GetResponseForPromptAsync(ChatRequest message, CancellationToken token) {
 		message.Model = this.Config.Model;
 		return await PostAsync<ChatRequest,ChatResponse>("/api/generate",message,token);
@@ -109,7 +125,16 @@ public class OllamaApiClient
 
 	public async IAsyncEnumerable<ChatResponse> GetStreamForPromptAsync(ChatRequest message, CancellationToken token) {
 		message.Model = this.Config.Model;
+		message.Stream = true;
 		await foreach(ChatResponse resp in  StreamPostAsync<ChatRequest,ChatResponse>("/api/generate",message,token)) {
+			yield return resp;
+		}
+	}
+
+	public async IAsyncEnumerable<ChatResponse> GetStreamForChatAsync(ChatRequest message, CancellationToken token) {
+		message.Model = this.Config.Model;
+		message.Stream = true;
+		await foreach(ChatResponse resp in  StreamPostAsync<ChatRequest,ChatResponse>("/api/chat",message,token)) {
 			yield return resp;
 		}
 	}
