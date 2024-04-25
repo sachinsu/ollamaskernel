@@ -12,12 +12,15 @@ using ollamask;
 //ref: https://techcommunity.microsoft.com/t5/educator-developer-blog/extending-semantic-kernel-using-ollamasharp-for-chat-and-text/ba-p/4104953
 public class TestChatGeneration
 {
+        private const string modelName = "gemma:2b";
+    private const string endpoint = "http://localhost:11434";
+
+
+
     [Fact]
     public async void TestChatGenerationviaSK() 
     {
-        var ollamachat = new OllamaChatCompletionService();
-        ollamachat.ModelApiEndPoint = "http://localhost:11434";
-        ollamachat.ModelName = "phi3";
+        var ollamachat = ServiceProvider.GetChatCompletionService();
 
 
         // semantic kernel builder
@@ -42,9 +45,7 @@ public class TestChatGeneration
     [Fact]
     public async void TestStreamChatGenerationviaSK() 
     {
-        var ollamachat = new OllamaChatCompletionService();
-        ollamachat.ModelApiEndPoint = "http://localhost:11434";
-        ollamachat.ModelName = "phi3";
+        var ollamachat = ServiceProvider.GetChatCompletionService();
 
 
         // semantic kernel builder

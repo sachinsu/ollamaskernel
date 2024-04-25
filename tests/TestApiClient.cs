@@ -9,13 +9,10 @@ using Azure.AI.OpenAI;
 public class TestApiClient
 {
 
-    private const string modelName = "phi3";
-    private const string endpoint = "http://localhost:11434";
-
     [Fact]
     public void TestClientCreation() 
     {
-        OllamaApiClient client = new(endpoint,modelName);
+        OllamaApiClient client = ServiceProvider.GetApiClient();
 
         Assert.NotNull(client );      
     }
@@ -24,7 +21,7 @@ public class TestApiClient
     [Fact]
     public async void TestPromptResponseNotStreaming() 
     {
-        OllamaApiClient client = new(endpoint,modelName);
+        OllamaApiClient client = ServiceProvider.GetApiClient();
 
         OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
                 Prompt="what is meteor?"
@@ -49,7 +46,7 @@ public class TestApiClient
     [Fact]
     public async void TestChatResponseNotStreaming() 
     {
-        OllamaApiClient client = new(endpoint,modelName);
+        OllamaApiClient client = ServiceProvider.GetApiClient();
 
         List<OllamaApiClient.ChatMessage> mesgs = new() {
             new OllamaApiClient.ChatMessage(){Role="system",Content="What is sixth sense?"}
@@ -82,7 +79,7 @@ public class TestApiClient
     [Fact]
     public async void TestPromptResponseStreaming() 
     {
-        OllamaApiClient client = new(endpoint,modelName);
+        OllamaApiClient client = ServiceProvider.GetApiClient();
 
         OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
                 Prompt="Is India a Great Country?",
@@ -110,7 +107,7 @@ public class TestApiClient
     [Fact]
     public async void TestChatResponseStreaming() 
     {
-        OllamaApiClient client = new(endpoint,modelName);
+        OllamaApiClient client = ServiceProvider.GetApiClient();
 
         List<OllamaApiClient.ChatMessage> mesgs = new() {
             new OllamaApiClient.ChatMessage(){Role="user",Content="What is sixth sense?"}

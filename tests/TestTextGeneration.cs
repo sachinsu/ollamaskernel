@@ -12,12 +12,12 @@ using ollamask;
 //ref: https://techcommunity.microsoft.com/t5/educator-developer-blog/extending-semantic-kernel-using-ollamasharp-for-chat-and-text/ba-p/4104953
 public class TestTextGeneration
 {
+
+
     [Fact]
     public async void TestStreamTextGenerationviaSK() 
     {
-        var ollamaText = new TextGenerationService();
-        ollamaText.ModelApiEndPoint = "http://localhost:11434";
-        ollamaText.ModelName = "phi3";
+        var ollamaText = ServiceProvider.GetTextGenerationService();
 
 
         // semantic kernel builder
@@ -38,9 +38,7 @@ public class TestTextGeneration
     [Fact]
     public async void TestTextGenerationviaSK() 
     {
-        var ollamaText = new TextGenerationService();
-        ollamaText.ModelApiEndPoint = "http://localhost:11434";
-        ollamaText.ModelName = "phi3";
+        var ollamaText = ServiceProvider.GetTextGenerationService();
 
 
         // semantic kernel builder
