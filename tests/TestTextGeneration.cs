@@ -13,7 +13,7 @@ using ollamask;
 public class TestTextGeneration
 {
     [Fact]
-    public async void TestTextGenerationviaSK() 
+    public async void TestStreamTextGenerationviaSK() 
     {
         var ollamaText = new TextGenerationService();
         ollamaText.ModelApiEndPoint = "http://localhost:11434";
@@ -28,13 +28,31 @@ public class TestTextGeneration
 
         // text generation
         var textGen = kernel.GetRequiredService<ITextGenerationService>();
-        var response = await textGen.GetTextContentsAsync("The weather in January in Toronto is usually ");
-        Assert.NotEqual(response[^1].Text,String.Empty);
-
 
         await foreach(StreamingTextContent str in  textGen.GetStreamingTextContentsAsync("Who is President of USA?")){
             Assert.NotNull(str.Text);
         }
+
+
+    }
+    [Fact]
+    public async void TestTextGenerationviaSK() 
+    {
+        var ollamaText = new TextGenerationService();
+        ollamaText.ModelApiEndPoint = "http://localhost:11434";
+        ollamaText.ModelName = "phi3";
+
+
+        // semantic kernel builder
+        var builder = Kernel.CreateBuilder();
+        builder.Services.AddKeyedSingleton<ITextGenerationService>("ollamaText", ollamaText);
+        var kernel = builder.Build();
+
+        // text generation
+        var textGen = kernel.GetRequiredService<ITextGenerationService>();
+        var response = await textGen.GetTextContentsAsync("The weather in January in Toronto is usually ");
+        Assert.NotEqual(response[^1].Text,String.Empty);
+
 
 
     }

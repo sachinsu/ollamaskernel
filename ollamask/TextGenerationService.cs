@@ -11,8 +11,6 @@ public class TextGenerationService : ITextGenerationService
 
     public IReadOnlyDictionary<string, object?> Attributes => throw new NotImplementedException();
 
-    private HttpClient client = new();
-
     public async Task<IReadOnlyList<TextContent>> GetTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
     {
           

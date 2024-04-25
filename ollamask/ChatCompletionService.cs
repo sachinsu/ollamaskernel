@@ -9,49 +9,65 @@ public class OllamaChatCompletionService : IChatCompletionService
     public string ModelApiEndPoint { get; set; }
     public string ModelName { get; set; }
 
-    private HttpClient client = new();
-
     public IReadOnlyDictionary<string, object?> Attributes => throw new NotImplementedException();
 
-    public Task<IReadOnlyList<ChatMessageContent>> GetChatMessageContentsAsync(ChatHistory chatHistory, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<ChatMessageContent>> GetChatMessageContentsAsync(ChatHistory chatHistory, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
    {
 
 
+        var client = new OllamaApiClient(ModelApiEndPoint, ModelName);
 
+        OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
+                Model=ModelName
+        };
 
-// var ollama = new OllamaApiClient(ModelUrl, ModelName); // (uri);
+        req.Messages = new List<OllamaApiClient.ChatMessage>();
 
-//             var chat = new Chat(ollama, _ => { });
+        // iterate though chatHistory Messages
+        foreach (var history in chatHistory)
+        {
+            req.Messages.Add(new OllamaApiClient.ChatMessage{
+                Role=history.Role.ToString(),
+                Content=history.Content
+            });
+        }
 
+        OllamaApiClient.ChatResponse resp = await client.GetResponseForChatAsync(req
+            , cancellationToken);
 
-//             // iterate though chatHistory Messages
-//             foreach (var message in chatHistory)
-//             {
-//                 if (message.Role == AuthorRole.System)
-//                 {
-//                     await chat.SendAs(ChatRole.System, message.Content);
-//                     continue;
-//                 }
-//             }
+        List<ChatMessageContent> content = new();
+        content.Add( new(role:resp.Message.Role.Equals("system",StringComparison.InvariantCultureIgnoreCase)?AuthorRole.System:AuthorRole.User,content:resp.Message.Content));
 
-//             var lastMessage = chatHistory.LastOrDefault();
-
-//             string question = lastMessage.Content;
-//             var chatResponse = "";
-//             var history = (await chat.Send(question, CancellationToken.None)).ToArray();
-
-//             var last = history.Last();
-//             chatResponse = last.Content;
-
-//             chatHistory.AddAssistantMessage(chatResponse);
-
-//             return chatHistory;
-
-        throw new NotImplementedException();
+        return content;
     }
 
-    public IAsyncEnumerable<StreamingChatMessageContent> GetStreamingChatMessageContentsAsync(ChatHistory chatHistory, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<StreamingChatMessageContent> GetStreamingChatMessageContentsAsync(ChatHistory chatHistory, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
-    }
+
+        var client = new OllamaApiClient(ModelApiEndPoint, ModelName);
+
+        OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
+                Model=ModelName
+        };
+
+        req.Messages = new List<OllamaApiClient.ChatMessage>();
+
+        // iterate though chatHistory Messages
+        foreach (var history in chatHistory)
+        {
+            req.Messages.Add(new OllamaApiClient.ChatMessage{
+                Role=history.Role.ToString(),
+                Content=history.Content
+            });
+        }
+
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken token = source.Token;
+
+        await foreach (OllamaApiClient.ChatResponse resp in  client.GetStreamForChatAsync(req,token)) { 
+            yield return new(role:resp.Message.Role.Equals("system",StringComparison.InvariantCultureIgnoreCase)?AuthorRole.System:AuthorRole.User,
+            content:resp.Message.Content ?? string.Empty); 
+        }
+
+     }
 }
