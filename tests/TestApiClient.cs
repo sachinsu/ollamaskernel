@@ -17,6 +17,32 @@ public class TestApiClient
         Assert.NotNull(client );      
     }
 
+    [Fact]
+    public async void TestEmbeddingsResponseNotStreaming() 
+    {
+        OllamaApiClient client = ServiceProvider.GetApiClient();
+
+        OllamaApiClient.ChatRequest req = new OllamaApiClient.ChatRequest() {
+                Prompt="What is JDK?"
+        };
+
+        Assert.NotNull(client );      
+
+        Assert.False(req.Stream );
+        
+        CancellationTokenSource source = new();
+        CancellationToken tkn = source.Token;
+        
+
+        OllamaApiClient.ChatResponse resp = await  client.GetEmbeddingsAsync(req
+            , tkn);
+
+        Assert.NotNull(resp );
+        Assert.True(resp.Embeddings.Count > 0);
+
+    }
+
+
 
     [Fact]
     public async void TestPromptResponseNotStreaming() 

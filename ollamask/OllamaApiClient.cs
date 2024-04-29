@@ -50,6 +50,9 @@ public class OllamaApiClient
 		public List<ChatMessage> Messages { get; set; }
 
 
+		[JsonPropertyName("embedding")]
+		public List<Double> Embeddings { get; set; }
+
 
 		[JsonPropertyName("done")]
 		public bool Done { get; set; }
@@ -111,6 +114,12 @@ public class OllamaApiClient
 			(Config ??=  new Configuration()).Model = defaultModel;
 			
 		}
+
+	public async Task<ChatResponse> GetEmbeddingsAsync(ChatRequest message, CancellationToken token) {
+		message.Model = this.Config.Model;
+		return await PostAsync<ChatRequest,ChatResponse>("/api/embeddings",message,token);
+	}
+
 
 	public async Task<ChatResponse> GetResponseForChatAsync(ChatRequest message, CancellationToken token) {
 		message.Model = this.Config.Model;
