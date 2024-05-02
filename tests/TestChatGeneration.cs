@@ -12,9 +12,6 @@ using ollamask;
 //ref: https://techcommunity.microsoft.com/t5/educator-developer-blog/extending-semantic-kernel-using-ollamasharp-for-chat-and-text/ba-p/4104953
 public class TestChatGeneration
 {
-        private const string modelName = "gemma:2b";
-    private const string endpoint = "http://localhost:11434";
-
 
 
     [Fact]

@@ -5,7 +5,7 @@ namespace OllamaSK.Tests;
 
 public class ServiceProvider { 
 
-        private const string modelName = "gemma:2b";
+        private const string modelName = "phi3";
     private const string endpoint = "http://localhost:11434";
 
     public static TextGenerationService GetTextGenerationService() {
