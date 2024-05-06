@@ -14,3 +14,18 @@ To setup Ollama follow the installation and setup instructions from the Ollama [
 For the sake of this post, we can use Phi3 model, so run ```ollama run phi3```. This will download phi3 model, if not already, and once done, it will present a prompt. Using this prompt, one can start chatting with the model. 
 
 ## Why SemanticKernel ?
+
+As such , Ollama can be integrated with from any application via REST API. Then why go for SemanticKernel SDK?  It provides a simplified integration of AI capabilities into existing applications, lowering the barrier of entry for new developers and supporting the ability to fine-tune models. It supports multiple languages like C#, Python and Java.
+
+## Using Ollama 
+
+Install Ollama by following instructions [here](https://github.com/ollama/ollama/blob/main/README.md#quickstart).Ollama exposes set of REST APIs, check Documentation [here](https://github.com/ollama/ollama/blob/main/docs/api.md). It provides range of functions like get response for Prompt, get Chat response. for Specific operations, it supports streaming and non-streaming response. First step is to download/pull  using ```ollama run phi3```. This will pull, if required, the model and set it up locally. In the end, it will show prompt where user can interact with model. 
+
+
+
+## Integrating with SemanticKernel 
+
+
+## Summary
+
+## Helpful Links
